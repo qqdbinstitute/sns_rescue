@@ -1,0 +1,94 @@
+@charset "utf-8";
+
+fieldset.inline-group {
+	margin: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+fieldset.inline-group legend {
+	display: inline;
+	margin: 0;
+	padding-left: 0;
+	padding-right: 0;
+	/* float: left; */
+}
+fieldset.inline-group select {
+	display: inline;
+}
+fieldset.inline-group ul {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+fieldset.inline-group ul li {
+	display: inline;
+	list-style: none;
+}
+
+ul.colon-separated {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+ul.colon-separated li {
+	display: inline;
+	list-style: none;
+}
+ul.colon-separated li::before {
+	content: ":";
+}
+ul.colon-separated li:first-child::before {
+	display: none;
+}
+
+.placeMarker {
+	position: absolute;
+	color: black;
+	background-color: white;
+	background-clip: padding-box;
+	width: 200px;
+	height: 60px;
+	border-radius: 3px;
+	padding: 15px 20px;
+	text-align: center;
+	vertical-align: middle;
+	display: block;
+	border: 1px solid rgba(0, 0, 0, 0.4);
+}
+.placeMarker::before, .placeMarker::after {
+	content: "";
+	position: absolute;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	top: 100%;
+	left: 50%;
+	margin-left: -10px;
+}
+.placeMarker::before {
+	border-top: 10px solid rgba(0, 0, 0, 0.5);
+	margin-top: 1px;
+}
+.placeMarker::after{
+	border-top: 10px solid white;
+}
+
+.socialList {
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+	list-style: none;
+}
+.socialList li {
+	float: left;
+	margin: 4px 4px 8px 0px;
+	padding: 0px;
+}
+.socialList iframe {
+	margin: 0px !important;
+}
+
+.footer {
+	padding-top: 1.5rem;
+	color: #777;
+	border-top: .05rem solid #e5e5e5;
+}

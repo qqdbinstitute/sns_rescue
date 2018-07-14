@@ -1,0 +1,816 @@
+<!doctype html>
+<html lang="ja">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+ <meta name="description" content="入力欄を順に埋めていくことで、SNS上で把握しやすい救助要請の定型文が作れます。" />
+ <title>SNS救助要請メッセージテンプレ</title>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous" />
+ <link rel="stylesheet" href="jQuery/css/blue/jquery-ui-1.10.1.custom.min.css" />
+ <link rel="stylesheet" href="css/main.css" />
+</head>
+<body class="bg-light">
+ <div class="container">
+  <h2 class="text-center py-5">SNS救助要請メッセージテンプレ</h2>
+
+  <div class="py-3">
+   <p class="lead">緊急に支援が必要ですか？ もし可能ならまず消防（119番、できればGPSをONにして）に連絡するのが確実です。</p>
+   <p class="lead">電話がつながらない場合や、情報提供を求める場合、または有用な情報を共有する場合にSNS救助要請は有効です。</p>
+   <p class="lead">以下の入力欄を埋めることで、SNSで状況を把握しやすいメッセージが作れます。</p>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-12 col-md-8 mb-4 card bg-light">
+    <ul class="card-body">
+     <li>全ての項目を埋めなくても構いません。わからないまたは重要ではない場合は左端のチェックを外してください。</li>
+     <li>文字数がオーバーする場合は基本的に上の項目を残してください。</li>
+     <li>可能ならば現場の様子がわかる説明や写真なども続けてアップロードしてください。</li>
+     <li>送信後はスマホを必要なとき以外は機内モードにする（電源ON/OFFや電波送受信はバッテリーを消費する）など、できるだけ体力や通信手段の温存に務めてください。</li>
+     <li>救助が完了したら混乱を避けるため、救助要請を削除し報告と謝辞をしましょう。</li>
+    </ul>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useCriteria" value="1" checked="checked" disabled="disabled" aria-label="1-要請分類使用チェック" />
+     <label class="form-check-label" for="useCriteria">1</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3 pl-0">
+    <select id="criteria" class="custom-select">
+     <!-- #救助 #救助要請 #テスト1 #test2 -->
+     <option value="">#救助 #救助要請 #未選択 - 選んでください</option>
+     <option value="oneself">#救助 #救助要請 #本人 - 救助を要請したい（その場所にいる）</option>
+     <option value="deputy">#救助 #救助要請 #代理 - 救助を要請したい（その場所にいない）</option>
+     <option value="sort">#救助 #救助要請 #整理 - 救助関連情報を整理・収集したい</option>
+    </select>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useStatusConfirmed" value="1" checked="checked" aria-label="2-状態確認時刻使用チェック" />
+     <label class="form-check-label" for="useStatusConfirmed">2</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <fieldset id="statusConfirmedFieldset" class="inline-group">
+     <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
+      <div class="col-4 col-sm-4 pl-0">
+       <legend class="col-form-label">状態確認時刻</legend>
+      </div>
+      <div class="col-8 col-sm-8 pl-0">
+       <ul class="row colon-separated">
+        <li>
+         <select id="statusConfirmedHour" class="custom-select col-5 col-sm-3">
+          <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+          <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+          <option>21</option><option>22</option><option>23</option>
+         </select>
+        </li>
+        <li>
+         <select id="statusConfirmedMinute" class="custom-select col-5 col-sm-3">
+          <option>00</option><option>10</option><option>20</option><option>30</option><option>40</option><option>50</option>
+         </select>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="usePlaceAddress" value="1" checked="checked" aria-label="3-場所（住所）使用チェック" />
+     <label class="form-check-label" for="usePlaceAddress">3</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <div class="form-group row">
+     <label for="placeAddress" class="col-4 col-sm-4 col-form-label pl-0">場所（住所）</label>
+     <div class="col-8 col-sm-8 pl-0">
+      <input type="text" class="form-control" id="placeAddress" placeholder="中区大手町1-1" />
+      <small>住所をはっきり示したくない場合は番地等を省略して下の目印欄を詳しく書いてください。</small>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="usePlaceLatLon" value="1" checked="checked" aria-label="4-場所（経緯度）使用チェック" />
+     <label class="form-check-label" for="usePlaceLatLon">4</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <fieldset id="placeLatLonFieldset" class="inline-group">
+     <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
+      <div class="col-4 col-sm-4 pl-0">
+       <legend class="col-form-label">場所（経緯度）</legend>
+      </div>
+      <div class="col-8 col-sm-8 pl-0">
+       <ul>
+        <li id="geoButtonLi">
+         <div class="form-group row">
+          <div class="d-none d-sm-block col-sm-5"></div>
+          <div class="col-12 col-sm-7 pb-2">
+           <button type="button" class="btn btn-primary" onclick="geoSearch();">位置情報を取得</button>
+           <div>
+            <small>位置情報が取得できても十分正確でない場合があるので地図を表示して確認してください。</small>
+           </div>
+          </div>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="mapPrefecture" class="col-12 col-sm-5 col-form-label">地図を表示</label>
+          <select id="mapPrefecture" class="custom-select col-5 col-sm-4" style="margin-left:15px;">
+           <option value="">選択地点</option>
+           <option value="01">北海道</option>
+           <option value="02">青森県</option>
+           <option value="03">岩手県</option>
+           <option value="04">宮城県</option>
+           <option value="05">秋田県</option>
+           <option value="06">山形県</option>
+           <option value="07">福島県</option>
+           <option value="08">茨城県</option>
+           <option value="09">栃木県</option>
+           <option value="10">群馬県</option>
+           <option value="11">埼玉県</option>
+           <option value="12">千葉県</option>
+           <option value="13">東京都</option>
+           <option value="14">神奈川県</option>
+           <option value="15">新潟県</option>
+           <option value="16">富山県</option>
+           <option value="17">石川県</option>
+           <option value="18">福井県</option>
+           <option value="19">山梨県</option>
+           <option value="20">長野県</option>
+           <option value="21">岐阜県</option>
+           <option value="22">静岡県</option>
+           <option value="23">愛知県</option>
+           <option value="24">三重県</option>
+           <option value="25">滋賀県</option>
+           <option value="26">京都府</option>
+           <option value="27">大阪府</option>
+           <option value="28">兵庫県</option>
+           <option value="29">奈良県</option>
+           <option value="30">和歌山県</option>
+           <option value="31">鳥取県</option>
+           <option value="32">島根県</option>
+           <option value="33">岡山県</option>
+           <option value="34">広島県</option>
+           <option value="35">山口県</option>
+           <option value="36">徳島県</option>
+           <option value="37">香川県</option>
+           <option value="38">愛媛県</option>
+           <option value="39">高知県</option>
+           <option value="40">福岡県</option>
+           <option value="41">佐賀県</option>
+           <option value="42">長崎県</option>
+           <option value="43">熊本県</option>
+           <option value="44">大分県</option>
+           <option value="45">宮崎県</option>
+           <option value="46">鹿児島県</option>
+           <option value="47">沖縄県</option>
+          </select>
+          <div class="col-2 col-sm-2">
+           <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#placeLatLonBox">
+            表示
+           </button>
+          </div>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="placeLatLon" class="col-12 col-sm-5 col-form-label">経緯度</label>
+          <div class="col-12 col-sm-7">
+           <input type="text" class="form-control" id="placeLatLon" placeholder="34.3965,132.4596" />
+          </div>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="placeAccuracy" class="col-12 col-sm-5 col-form-label">精度</label>
+          <select id="placeAccuracy" class="custom-select col-7 col-sm-4" style="margin-left:15px;">
+           <option value="3">約100m</option>
+           <option value="4">約10m</option>
+           <option value="5" selected="selected">約1m</option>
+          </select>
+          <small class="p-3">住所をはっきり示したくない場合は精度を約100mにして下の目印欄を詳しく書いてください。</small>
+         </div>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+  </div>
+
+  <div class="modal fade" id="placeLatLonBox" tabindex="-1" role="dialog" aria-labelledby="地点経緯度ボックス" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h5 class="modal-title">
+       地点経緯度ボックス
+      </h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+      </button>
+     </div>
+     <div class="modal-body">
+      <p>地図を移動・拡大・縮小してクリック（タッチ）し、目標の地点を選択できたらOKを押してください。</p>
+      <div id="mapContainer"></div>
+     </div>
+     <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary" onclick="getLatLonAndClose();">OK</button>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useAlreadyContacted" value="1" checked="checked" aria-label="5-連絡済使用チェック" />
+     <label class="form-check-label" for="useAlreadyContacted">5</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <div class="form-group row">
+     <label for="alreadyContacted" class="col-4 col-sm-4 col-form-label pl-0">連絡済</label>
+     <select id="alreadyContacted" class="custom-select col-7 col-sm-5">
+      <option value="undone">未</option>
+      <option value="fireService">消防</option>
+      <option value="police">警察</option>
+      <option value="rescue">レスキュー</option>
+      <option value="publicOffice">役所</option>
+      <option value="jsdf">自衛隊</option>
+     </select>
+    </div>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useLandmark" value="1" checked="checked" aria-label="6-目印使用チェック" />
+     <label class="form-check-label" for="useLandmark">6</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <div class="form-group row">
+     <label for="landmark" class="col-12 col-sm-4 col-form-label pl-0">目印</label>
+     <div class="col-12 col-sm-8 pl-0">
+      <textarea class="form-control" id="landmark" placeholder="神屋交差点付近の瓦屋根でベランダに緑色のタオル" rows="2"></textarea>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useEvacuee" value="1" checked="checked" aria-label="7-避難者使用チェック" />
+     <label class="form-check-label" for="useEvacuee">7</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <fieldset id="evacueeFieldset" class="inline-group">
+     <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
+      <div class="col-4 col-sm-4 pl-0">
+       <legend class="col-form-label">避難者</legend>
+      </div>
+      <div class="col-8 col-sm-8 pl-0">
+       <ul>
+        <li>
+         <div class="form-group row">
+          <label for="evacueeCount" class="col-12 col-sm-5 col-form-label">人数</label>
+          <select id="evacueeCount" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="1">1人</option>
+           <option value="2">2人</option>
+           <option value="3">3人</option>
+           <option value="4">4人</option>
+           <option value="5">5人</option>
+           <option value="6">6人</option>
+           <option value="7">7人</option>
+           <option value="10">10人</option>
+           <option value="20">20人</option>
+           <option value="50">50人</option>
+           <option value="100">100人</option>
+          </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="evacueeInfant" class="col-12 col-sm-5 col-form-label">幼児</label>
+          <select id="evacueeInfant" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="contain">含む</option>
+           <option value="many">多</option>
+           </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="evacueeElder" class="col-12 col-sm-5 col-form-label">高齢者</label>
+          <select id="evacueeElder" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="contain">含む</option>
+           <option value="many">多</option>
+           </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="evacueeSick" class="col-12 col-sm-5 col-form-label">傷病人</label>
+          <select id="evacueeSick" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="contain">含む</option>
+           <option value="many">多</option>
+           </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="evacueeSerious" class="col-12 col-sm-5 col-form-label">重症者</label>
+          <select id="evacueeSerious" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="contain">含む</option>
+           <option value="many">多</option>
+           </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="evacueeUnknown" class="col-12 col-sm-5 col-form-label">安否不明</label>
+          <select id="evacueeUnknown" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="exist">有</option>
+           <option value="many">多</option>
+          </select>
+         </div>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useShelter1" value="1" checked="checked" aria-label="8-避難場所1使用チェック" />
+     <label class="form-check-label" for="useShelter1">8</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <fieldset id="shelter1Fieldset" class="inline-group">
+     <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
+      <div class="col-4 col-sm-4 pl-0">
+       <legend class="col-form-label">避難場所1</legend>
+      </div>
+      <div class="col-8 col-sm-8 pl-0">
+       <ul>
+        <li>
+         <div class="form-group row">
+          <label for="shelterKind" class="col-12 col-sm-5 col-form-label">種類</label>
+          <select id="shelterKind" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="ground">平地</option>
+           <option value="hill">高台</option>
+           <option value="building">建物</option>
+           <option value="car">車中</option>
+           <option value="mountain">山岳</option>
+           <option value="forest">森林</option>
+           <option value="river">河川</option>
+           <option value="lake">湖沼</option>
+           <option value="sea">海洋</option>
+          </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="shelterBuilding" class="col-12 col-sm-5 col-form-label">建物</label>
+          <select id="shelterBuilding" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="wooden">木造家屋</option>
+           <option value="concrete">鉄筋コン</option>
+           <option value="strong">頑丈</option>
+           <option value="week">軟弱</option>
+          </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="allFloors" class="col-12 col-sm-5 col-form-label">全階数</label>
+          <select id="allFloors" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="1">1階</option>
+           <option value="2">2階</option>
+           <option value="3">3階</option>
+           <option value="4">4階</option>
+           <option value="5">5階</option>
+           <option value="6">6階</option>
+           <option value="7">7階</option>
+           <option value="8">8階</option>
+           <option value="9">9階</option>
+           <option value="10">10階</option>
+           <option value="11">11階</option>
+           <option value="12">12階</option>
+           <option value="13">13階</option>
+           <option value="14">14階</option>
+           <option value="15">15階</option>
+           <option value="16">16階</option>
+           <option value="17">17階</option>
+           <option value="18">18階</option>
+           <option value="19">19階</option>
+           <option value="20">20階以上</option>
+          </select>
+         </div>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useShelter2" value="1" checked="checked" aria-label="9-避難場所2使用チェック" />
+     <label class="form-check-label" for="useShelter2">9</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <fieldset id="shelter2Fieldset" class="inline-group">
+     <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
+      <div class="col-4 col-sm-4 pl-0">
+       <legend class="col-form-label">避難場所2</legend>
+      </div>
+      <div class="col-8 col-sm-8 pl-0">
+       <ul>
+        <li>
+         <div class="form-group row">
+          <label for="evacueeFloor" class="col-12 col-sm-5 col-form-label">避難階</label>
+          <select id="evacueeFloor" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="o">屋外</option>
+           <option value="1">1階</option>
+           <option value="2">2階</option>
+           <option value="3">3階</option>
+           <option value="4">4階</option>
+           <option value="5">5階</option>
+           <option value="6">6階</option>
+           <option value="7">7階</option>
+           <option value="8">8階</option>
+           <option value="9">9階</option>
+           <option value="10">10階</option>
+           <option value="11">11階</option>
+           <option value="12">12階</option>
+           <option value="13">13階</option>
+           <option value="14">14階</option>
+           <option value="15">15階</option>
+           <option value="16">16階</option>
+           <option value="17">17階</option>
+           <option value="18">18階</option>
+           <option value="19">19階</option>
+           <option value="20">20階以上</option>
+           <option value="r">屋上</option>
+           <option value="g">地下</option>
+          </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="evacueeDanger" class="col-12 col-sm-5 col-form-label">浸水・倒壊・延焼等</label>
+          <select id="evacueeDanger" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="safe">安全</option>
+           <option value="danger">危険</option>
+           <option value="threatened">切迫</option>
+          </select>
+         </div>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="usePossession" value="1" checked="checked" aria-label="10-所持品使用チェック" />
+     <label class="form-check-label" for="usePossession">10</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <fieldset id="possessionFieldset" class="inline-group">
+     <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
+      <div class="col-4 col-sm-4 pl-0">
+       <legend class="col-form-label">所持品</legend>
+      </div>
+      <div class="col-8 col-sm-8 pl-0">
+       <ul>
+        <li>
+         <div class="form-group row">
+          <label for="mobilePhone" class="col-12 col-sm-5 col-form-label">携帯・スマホ</label>
+          <select id="mobilePhone" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="low">バッテリー少</option>
+           <option value="high">バッテリー多</option>
+          </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="lighting" class="col-12 col-sm-5 col-form-label">照明器具</label>
+          <select id="lighting" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="exist">有</option>
+          </select>
+         </div>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useRemarks" value="1" checked="checked" aria-label="11-備考使用チェック" />
+     <label class="orm-check-label" for="useRemarks">11</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <div class="form-group row">
+     <label for="remarks" class="col-12 col-sm-4 col-form-label pl-0">備考</label>
+     <div class="col-12 col-sm-8 pl-0">
+      <textarea class="form-control" id="remarks" placeholder="2階まで浸水しています。" rows="2"></textarea>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useOthers1" value="1" aria-label="12-その他1使用チェック" />
+     <label class="form-check-label" for="useOthers1">12</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <fieldset id="others1Fieldset" class="inline-group">
+     <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
+      <div class="col-4 col-sm-4 pl-0">
+       <legend class="col-form-label">その他1</legend>
+      </div>
+      <div class="col-8 col-sm-8 pl-0">
+       <ul>
+        <li>
+         <div class="form-group row">
+          <label for="warmness" class="col-12 col-sm-5 col-form-label">保温</label>
+          <select id="warmness" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="bad">悪</option>
+           <option value="good">良</option>
+          </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="drinkingWater" class="col-12 col-sm-5 col-form-label">飲料水</label>
+          <select id="drinkingWater" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="little">少</option>
+           <option value="much">多</option>
+          </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="food" class="col-12 col-sm-5 col-form-label">食料</label>
+          <select id="food" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="little">少</option>
+           <option value="much">多</option>
+          </select>
+         </div>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useOthers2" value="1" aria-label="13-その他2使用チェック" />
+     <label class="form-check-label" for="useOthers2">13</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <fieldset id="others2Fieldset" class="inline-group">
+     <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
+      <div class="col-4 col-sm-4 pl-0">
+       <legend class="col-form-label">その他2</legend>
+      </div>
+      <div class="col-8 col-sm-8 pl-0">
+       <ul>
+        <li>
+         <div class="form-group row">
+          <label for="electricity" class="col-12 col-sm-5 col-form-label">電気</label>
+          <select id="electricity" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="exist">有</option>
+          </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="waterSupply" class="col-12 col-sm-5 col-form-label">水道</label>
+          <select id="waterSupply" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="exist">有</option>
+          </select>
+         </div>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="useOthers3" value="1" aria-label="14-その他3使用チェック" />
+     <label class="form-check-label" for="useOthers3">14</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <fieldset id="others3Fieldset" class="inline-group">
+     <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
+      <div class="col-4 col-sm-4 pl-0">
+       <legend class="col-form-label">その他3</legend>
+      </div>
+      <div class="col-8 col-sm-8 pl-0">
+       <ul>
+        <li>
+         <div class="form-group row">
+          <label for="toilet" class="col-12 col-sm-5 col-form-label">トイレ</label>
+          <select id="toilet" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="exist">有</option>
+          </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="medicine" class="col-12 col-sm-5 col-form-label">医薬品</label>
+          <select id="medicine" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="little">少</option>
+           <option value="much">多</option>
+          </select>
+         </div>
+        </li>
+        <li>
+         <div class="form-group row">
+          <label for="sanitary" class="col-12 col-sm-5 col-form-label">衛生用品</label>
+          <select id="sanitary" class="custom-select col-7 col-sm-5" style="margin-left:15px;">
+           <option value="none">無</option>
+           <option value="little">少</option>
+           <option value="much">多</option>
+          </select>
+         </div>
+        </li>
+       </ul>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-12 col-md-8 mb-4 py-3 card bg-light">
+    <h3>リンク集</h3>
+    <dl>
+     <dt><a href="http://www.metro.tokyo.jp/INET/OSHIRASE/2015/08/20p8l300.htm">「東京防災」の作成について</a></dt>
+     <dd>災害発生時の予備知識と発生後の対処についてよくまとめていると評判の「東京防災」のダウンロードページ。</dd>
+    </dl>
+    <dl>
+     <dt><a href="https://www.jma.go.jp/jma/menu/menuflash.html">気象庁防災情報</a></dt>
+     <dd>気象庁の各種防災情報に飛ぶページ。</dd>
+    </dl>
+    <dl>
+     <dt><a href="http://www.river.go.jp/">国土交通省 川の防災情報</a></dt>
+     <dd>特に河川の氾濫の危険度についてはここから。</dd>
+    </dl>
+    <dl>
+     <dt><a href="https://weather.yahoo.co.jp/weather/">Yahoo!天気・災害</a></dt>
+     <dd>日本のインターネットポータル大手に恥じない情報の充実ぶり。スマホにYahoo!防災速報のアプリを入れておくと便利。</dd>
+    </dl>
+    <dl>
+     <dt><a href="https://www.google.com/search?q=%E9%98%B2%E7%81%BD%E6%83%85%E5%A0%B1+%E3%83%AA%E3%83%B3%E3%82%AF%E9%9B%86">Google検索「防災情報 リンク集」</a></dt>
+     <dd>「防災情報 リンク集」の検索結果</dd>
+    </dl>
+   </div>
+  </div>
+
+  <footer class="footer">
+   <p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+    <a rel="license" href="http://creativecommons.org/publicdomain/zero/1.0/">
+     <img src="https://licensebuttons.net/p/zero/1.0/80x15.png" style="border-style: none;" alt="CC0" />
+    </a>
+    <br />
+    To the extent possible under law,
+    <a rel="dct:publisher"
+     href="https://github.com/qqdbinstitute">
+     <span property="dct:title">QQDB Institute</span>
+    </a>
+    has waived all copyright and related or neighboring rights to
+    <span property="dct:title">SNS Rescue Request Message Template</span>.
+    This work is published from:
+    <span property="vcard:Country" datatype="dct:ISO3166" content="JP" about="https://github.com/qqdbinstitute">Japan</span>.
+   </p>
+  </footer>
+
+  <div id="messageFooter" class="fixed-bottom border-top bg-light">
+   <div class="row justify-content-md-center mx-0">
+    <div class="col-12 col-md-8 mb-0">
+     <div class="form-group mb-1">
+      <div class="row">
+       <div class="col-6 pt-2">
+        <label for="message">プレビュー</label>
+       </div>
+       <div class="col-6 text-right">
+        <button id="copyMessageBtn" type="button" class="btn btn-primary btn-sm my-1" data-clipboard-target="#message">クリップボードにコピー</button>
+       </div>
+       <textarea class="form-control" id="message" rows="3"></textarea>
+      </div>
+      <div class="row">
+       <div class="col-12 col-sm-6">
+        文字数: <span id="messageCharCount">0</span>
+        Twitter文字数: <span id="messageTwitterRatio">0</span>%
+       </div>
+       <div class="col-12 col-sm-6">
+        <ul class="socialList float-right">
+         <li id="twitterButtonLi">
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+
+  <button id="messageBoxOpen" type="button" class="d-none btn btn-primary" data-toggle="modal" data-target="#messageBox">
+  invisible button
+  </button>
+  <div class="modal fade" id="messageBox" tabindex="-1" role="dialog" aria-labelledby="メッセージボックス" aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h5 class="modal-title">
+       <span id="messageBoxIcon"></span>
+       <span id="messageBoxTitle">メッセージボックス</span>
+      </h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+      </button>
+     </div>
+     <div class="modal-body">
+      <p id="messageBoxText"></p>
+     </div>
+     <div class="modal-footer">
+      <button id="messageBoxClose" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+     </div>
+    </div>
+   </div>
+  </div>
+ </div>
+
+ <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+ <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+ <script src="jQuery/js/jquery-ui-1.10.1.custom.min.js"></script>
+ <script src="jQuery/js/jquery.mousewheel.js"></script>
+ <script src="TilesSquare/js/main.js"></script>
+ <script src="js/main.js"></script>
+</body>
+</html>
