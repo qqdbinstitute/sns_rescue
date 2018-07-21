@@ -10,7 +10,6 @@ fieldset.inline-group legend {
 	margin: 0;
 	padding-left: 0;
 	padding-right: 0;
-	/* float: left; */
 }
 fieldset.inline-group select {
 	display: inline;
@@ -23,6 +22,41 @@ fieldset.inline-group ul {
 fieldset.inline-group ul li {
 	display: inline;
 	list-style: none;
+}
+
+fieldset.block-group {
+	margin: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+fieldset.block-group legend {
+	display: inline;
+	margin: 0;
+	padding-left: 0;
+	padding-right: 0;
+}
+fieldset.block-group ul {
+	margin: 0;
+	padding: 0;
+}
+fieldset.block-group ul li {
+	list-style: none;
+}
+
+ul.month-day-separated {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+ul.month-day-separated li {
+	display: inline;
+	list-style: none;
+}
+ul.month-day-separated li:nth-child(1)::after {
+	content: "\6708";
+}
+ul.month-day-separated li:nth-child(2)::after {
+	content: "\65E5";
 }
 
 ul.colon-separated {
@@ -39,6 +73,13 @@ ul.colon-separated li::before {
 }
 ul.colon-separated li:first-child::before {
 	display: none;
+}
+
+.w-30 {
+	width: 30% !important;
+}
+.w-40 {
+	width: 40% !important;
 }
 
 .placeMarker {
@@ -73,22 +114,16 @@ ul.colon-separated li:first-child::before {
 }
 
 .socialList {
-	margin: 0px;
-	padding: 0px;
-	overflow: hidden;
-	list-style: none;
+margin: 0px;
+padding: 0px;
+overflow: hidden;
+list-style: none;
 }
 .socialList li {
-	float: left;
-	margin: 4px 4px 8px 0px;
-	padding: 0px;
+float: left;
+margin: 4px 4px 8px 0px;
+padding: 0px;
 }
 .socialList iframe {
-	margin: 0px !important;
-}
-
-.footer {
-	padding-top: 1.5rem;
-	color: #777;
-	border-top: .05rem solid #e5e5e5;
+margin: 0px !important;
 }

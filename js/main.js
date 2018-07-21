@@ -248,7 +248,16 @@ function updateForm() {
 
 	var useStatusConfirmed = $("#useStatusConfirmed").prop("checked");
 	if(useStatusConfirmed) {
-		message += " 状態確認" + $("#statusConfirmedHour").val()
+		message += " 状態確認";
+		var statusConfirmedMonth = $("#statusConfirmedMonth").val(),
+			statusConfirmedDay = $("#statusConfirmedDay").val()
+		if(statusConfirmedMonth != "") {
+			message += statusConfirmedMonth + "月";
+		}
+		if(statusConfirmedDay != "") {
+			message += statusConfirmedDay + "日";
+		}
+		message += $("#statusConfirmedHour").val()
 			+ ":" + $("#statusConfirmedMinute").val();
 	}
 	$("#statusConfirmedFieldset").prop("disabled", !useStatusConfirmed);
@@ -362,13 +371,6 @@ function updateForm() {
 	}
 	$("#possessionFieldset").prop("disabled", !usePossession);
 
-	var useRemarks = $("#useRemarks").prop("checked"),
-		remarks = $("#remarks").val().replace(/\s/g, "");
-	if(useRemarks && remarks.length > 0) {
-		message += " " + remarks;
-	}
-	$("#remarks").prop("disabled", !useRemarks);
-
 	var useOthers1 = $("#useOthers1").prop("checked");
 	if(useOthers1) {
 		message += " 保温" + $("#warmness option:selected").text();
@@ -392,45 +394,117 @@ function updateForm() {
 	}
 	$("#others3Fieldset").prop("disabled", !useOthers3);
 
+	var useRemarks = $("#useRemarks").prop("checked"),
+		remarks = $("#remarks").val().trim().replace(/[\r\n]/g, " ");
+	if(useRemarks && remarks.length > 0) {
+		message += "\n" + remarks;
+	}
+	$("#remarks").prop("disabled", !useRemarks);
+
+	var useReference = $("#useReference").prop("checked"),
+		refRadio = $("input[name=refRadio]:checked").val(),
+		refTweetURI = $("#refTweetURI").val().replace(/\s/g, ""),
+		refTwitterAccount = $("#refTwitterAccount").val().replace(/\s/g, "");
+	if(refTweetURI.indexOf("mobile.twitter.com") >= 0) {
+		refTweetURI = refTweetURI.replace("mobile.twitter.com", "twitter.com");
+		$("#refTweetURI").val(refTweetURI);
+	}
+	if(useReference) {
+		switch(refRadio) {
+		case "t":
+			if(refTweetURI.length > 0) {
+				message += "\n" + refTweetURI;
+			}
+			break;
+		case "a":
+			if(refTwitterAccount.length > 0) {
+				message += "\n@" + refTwitterAccount;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	$("#refTweetURI").prop("disabled", refRadio != "t");
+	$("#refTwitterAccount").prop("disabled", refRadio != "a");
+	$("#referenceFieldset").prop("disabled", !useReference);
+
 	$("#message").val(message);
 	$("#messageCharCount").text(message.length);
 	$("#messageTwitterRatio").text(getMessageTwitterRatio(message));
 
-	reloadTwitterButton();
+	reloadTwitterWidgets();
 
 	$("#shelterBuilding").prop("disabled", !isShelterBuilding);
 	$("#allFloors").prop("disabled", !isShelterBuilding);
 	$("#evacueeFloor").prop("disabled", useShelter1 && !isShelterBuilding);
 }
 
-var twitterButtonTimer = -1;
-function reloadTwitterButton() {
-	if(twitterButtonTimer > 0) {
-		clearTimeout(twitterButtonTimer);
-		twitterButtonTimer = -1;
+var twitterWidgetsTimer = -1,
+	prevRefTweetURI = "",
+	prevMessage = "";
+function reloadTwitterWidgets() {
+	if(twitterWidgetsTimer > 0) {
+		clearTimeout(twitterWidgetsTimer);
+		twitterWidgetsTimer = -1;
 	}
 
 	if(!window.twttr) {
-		twitterButtonTimer = setTimeout(function() {
-			reloadTwitterButton();
+		twitterWidgetsTimer = setTimeout(function() {
+			reloadTwitterWidgets();
 		}, 500);
 		return;
 	}
 
-	var $twitterButtonLi = $("#twitterButtonLi");
-	if($twitterButtonLi.children().length > 0) {
-		$twitterButtonLi.empty();
-	}
+	var reloadRefTweetURI = false,
+		useReference = $("#useReference").prop("checked"),
+		refRadio = $("input[name=refRadio]:checked").val(),
+		refTweetURI = $("#refTweetURI").val().replace(/\s/g, "");
+	if(prevRefTweetURI != refTweetURI) {
+		var $refTweetEmbedDiv = $("#refTweetEmbedDiv");
+		if($refTweetEmbedDiv.children().length > 0) {
+			$refTweetEmbedDiv.empty();
+		}
 
-	var encodedMessage = encodeURIComponent($("#message").val()),
-		$twitterButton = $("<a />").attr("id", "twitterButton")
-			.attr("href", "https://twitter.com/intent/tweet?text=" + encodedMessage)
-			.addClass("twitter-hashtag-button")
-			.attr("data-show-count", "false")
-			.attr("data-size", "large")
-			.text("Tweet");
-	$twitterButtonLi.append($twitterButton);
-	twttr.widgets.load();
+		if(useReference && refRadio == "t" && refTweetURI.length > 0) {
+			var $embedSrc = $("<blockquote />").addClass("twitter-tweet").attr("data-lang", "ja")
+				.append($("<p />").attr("lang", "ja").attr("dir", "ltr")
+					.text("ツイートを読み込むことができれば内容がここに表示されます。"))
+				.append($("<a />").attr("href", refTweetURI).text(refTweetURI));
+			$refTweetEmbedDiv.append($embedSrc);
+
+			reloadRefTweetURI = true;
+			$refTweetEmbedDiv.show();
+		} else {
+			$refTweetEmbedDiv.hide();
+		}
+	}
+	prevRefTweetURI = refTweetURI;
+
+	var reloadMessage = false,
+		message = $("#message").val();
+	if(prevMessage != message) {
+		var $twitterButtonLi = $("#twitterButtonLi");
+		if($twitterButtonLi.children().length > 0) {
+			$twitterButtonLi.empty();
+		}
+
+		var encodedMessage = encodeURIComponent(message),
+			$twitterButton = $("<a />").attr("id", "twitterButton")
+				.attr("href", "https://twitter.com/intent/tweet?text=" + encodedMessage)
+				.addClass("twitter-hashtag-button")
+				.attr("data-show-count", "false")
+				.attr("data-size", "large")
+				.text("Tweet");
+		$twitterButtonLi.append($twitterButton);
+
+		reloadMessage = true;
+	}
+	prevMessage = message;
+
+	if(reloadRefTweetURI || reloadMessage) {
+		twttr.widgets.load();
+	}
 }
 
 // https://octicons.github.com/
@@ -554,15 +628,17 @@ function getLatLonAndClose() {
 	$("#placeLatLonBox").modal("toggle");
 }
 
-var maxWeightedLength = 280;
-var defaultWeight = 200;
-var codePointRanges = [{"start":0,"end":4351,"weight":100},{"start":8192,"end":8205,"weight":100},{"start":8208,"end":8223,"weight":100},{"start":8242,"end":8247,"weight":100}];
+var maxWeightedLength = 280,
+	defaultWeight = 200,
+	transformedURLDummy = "12345678901234567890123", // 23文字
+	codePointRanges = [{"start":0,"end":4351,"weight":100},{"start":8192,"end":8205,"weight":100},{"start":8208,"end":8223,"weight":100},{"start":8242,"end":8247,"weight":100}];
 
-// Twitter文字数簡易計算 URL、サロゲートペア考慮なし
+// Twitter文字数簡易計算 サロゲートペア考慮なし
 function getMessageTwitterRatio(message) {
-	var total = 0,
-		normalized = (typeof String.prototype.normalize === "function") ? message.normalize() : message;
+	message = message.replace(/https?:\/\/[A-Za-z0-9@!?\(\)\*';:=\+,\.\$\/%#\[\]\-_~@\|&]+/g, transformedURLDummy);
 
+	var total = 0;
+		normalized = (typeof String.prototype.normalize === "function") ? message.normalize() : message;
 	for(var midx = 0; midx < normalized.length; midx++) {
 		var weight = defaultWeight,
 			ch = normalized.charAt(midx),

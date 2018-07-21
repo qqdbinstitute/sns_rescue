@@ -8,4 +8,6 @@ SNS救助要請メッセージテンプレ
 [https://qqdbinstitute.github.io/snsrescue/message.html](https://qqdbinstitute.github.io/snsrescue/message.html)
 で実際に操作できます。
 
-![公開ページのQRコード](/qr-snsrescure.png)
+![公開ページのQRコード](/qr-snsrescure.png) （上記アドレスのQRコード）
+
+ライセンスは明示されている場合を除きパブリックドメインです。ただし改変の際はQQDB研究所関連の文字列は自身のものに書き換えてください。

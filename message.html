@@ -60,29 +60,46 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="useStatusConfirmed" value="1" checked="checked" aria-label="2-状態確認時刻使用チェック" />
-     <label class="form-check-label" for="useStatusConfirmed">2</label>
+     <input class="form-check-input position-static" type="checkbox" id="useReference" value="1" checked="checked" aria-label="2-参照すべきツイートまたはアカウント" />
+     <label class="form-check-label" for="useReference">2</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
-    <fieldset id="statusConfirmedFieldset" class="inline-group">
+    <fieldset id="referenceFieldset" class="block-group">
      <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
-      <div class="col-4 col-sm-4 pl-0">
-       <legend class="col-form-label">状態確認時刻</legend>
+      <div class="col-12 col-sm-4 pl-0">
+       <legend class="col-form-label">参照すべきツイートまたはアカウント</legend>
       </div>
-      <div class="col-8 col-sm-8 pl-0">
-       <ul class="row colon-separated">
-        <li>
-         <select id="statusConfirmedHour" class="custom-select col-5 col-sm-3">
-          <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-          <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
-          <option>21</option><option>22</option><option>23</option>
-         </select>
+      <div class="col-12 col-sm-8 pl-0">
+       <ul>
+        <li class="form-row mx-3">
+         <div class="form-check col-auto">
+          <input class="form-check-input" type="radio" name="refRadio" id="refRadio.t" value="t" checked="checked">
+          <label class="form-check-label" for="refRadio.t">ツイート</label>
+         </div>
+         <div class="form-group col-auto">
+          <label class="sr-only" for="refTweetURI">ツイートURI</label>
+          <input type="url" class="form-control" id="refTweetURI" placeholder="https://twitter.com/TwitterLifeline/status/642206749265518592">
+          <small class="p-0">オリジナルの救助要請ツイートがあればURIをコピペしてください。引用リツイートされます。</small>
+         </div>
+         <div id="refTweetEmbedDiv" class="col-auto" style="display:none;">
+         </div>
         </li>
-        <li>
-         <select id="statusConfirmedMinute" class="custom-select col-5 col-sm-3">
-          <option>00</option><option>10</option><option>20</option><option>30</option><option>40</option><option>50</option>
-         </select>
+        <li class="form-row mx-3">
+         <div class="form-check col-auto">
+          <input class="form-check-input" type="radio" name="refRadio" id="refRadio.a" value="a">
+          <label class="form-check-label" for="refRadio.a">アカウント</label>
+         </div>
+         <div class="form-group col-auto">
+          <label class="sr-only" for="refTwitterAccount">アカウント名</label>
+          <div class="input-group">
+           <div class="input-group-prepend">
+            <div class="input-group-text">@</div>
+           </div>
+           <input type="text" class="form-control" id="refTwitterAccount" placeholder="TwitterLifeline">
+          </div>
+          <small class="p-0">救助要請の発信者のアカウントがわかれば入力してください。</small>
+         </div>
         </li>
        </ul>
       </div>
@@ -94,14 +111,70 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="usePlaceAddress" value="1" checked="checked" aria-label="3-場所（住所）使用チェック" />
-     <label class="form-check-label" for="usePlaceAddress">3</label>
+     <input class="form-check-input position-static" type="checkbox" id="useStatusConfirmed" value="1" checked="checked" aria-label="3-状態確認時刻使用チェック" />
+     <label class="form-check-label" for="useStatusConfirmed">3</label>
+    </div>
+   </div>
+   <div class="col-10 col-md-7 mb-3">
+    <fieldset id="statusConfirmedFieldset" class="inline-group">
+     <div class="row"><!-- https://github.com/twbs/bootstrap/issues/21666 -->
+      <div class="col-12 col-sm-4 pl-0">
+       <legend class="col-form-label">状態確認時刻</legend>
+      </div>
+      <div class="col-12 col-sm-8 pl-0">
+       <div class="mb-3">
+        <ul class="form-inline month-day-separated">
+         <li>
+          <select id="statusConfirmedMonth" class="custom-select w-40">
+           <option value="">（省略）</option>
+           <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+           <option>11</option><option>12</option>
+          </select>
+         </li>
+         <li>
+          <select id="statusConfirmedDay" class="custom-select w-40">
+           <option value="">（省略）</option>
+           <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+           <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+           <option>21</option><option>22</option><option>23</option><option>24</option><option>25</option><option>26</option><option>27</option><option>28</option><option>29</option><option>30</option>
+           <option>31</option>
+          </select>
+         </li>
+        </ul>
+       </div>
+       <div class="mb-3">
+        <ul class="form-inline colon-separated">
+         <li>
+          <select id="statusConfirmedHour" class="custom-select w-30">
+           <option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+           <option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option>
+           <option>21</option><option>22</option><option>23</option>
+          </select>
+         </li>
+         <li>
+          <select id="statusConfirmedMinute" class="custom-select w-30">
+           <option>00</option><option>10</option><option>20</option><option>30</option><option>40</option><option>50</option>
+          </select>
+         </li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </fieldset>
+   </div>
+  </div>
+
+  <div class="row justify-content-md-center">
+   <div class="col-2 col-md-1 mb-3 px-1">
+    <div class="form-check">
+     <input class="form-check-input position-static" type="checkbox" id="usePlaceAddress" value="1" checked="checked" aria-label="4-場所（住所）使用チェック" />
+     <label class="form-check-label" for="usePlaceAddress">4</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
     <div class="form-group row">
-     <label for="placeAddress" class="col-4 col-sm-4 col-form-label pl-0">場所（住所）</label>
-     <div class="col-8 col-sm-8 pl-0">
+     <label for="placeAddress" class="col-12 col-sm-4 col-form-label pl-0">場所（住所）</label>
+     <div class="col-12 col-sm-8 pl-0">
       <input type="text" class="form-control" id="placeAddress" placeholder="中区大手町1-1" />
       <small>住所をはっきり示したくない場合は番地等を省略して下の目印欄を詳しく書いてください。</small>
      </div>
@@ -112,8 +185,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="usePlaceLatLon" value="1" checked="checked" aria-label="4-場所（経緯度）使用チェック" />
-     <label class="form-check-label" for="usePlaceLatLon">4</label>
+     <input class="form-check-input position-static" type="checkbox" id="usePlaceLatLon" value="1" checked="checked" aria-label="5-場所（経緯度）使用チェック" />
+     <label class="form-check-label" for="usePlaceLatLon">5</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
@@ -247,8 +320,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="useAlreadyContacted" value="1" checked="checked" aria-label="5-連絡済使用チェック" />
-     <label class="form-check-label" for="useAlreadyContacted">5</label>
+     <input class="form-check-input position-static" type="checkbox" id="useAlreadyContacted" value="1" checked="checked" aria-label="6-連絡済使用チェック" />
+     <label class="form-check-label" for="useAlreadyContacted">6</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
@@ -269,8 +342,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="useLandmark" value="1" checked="checked" aria-label="6-目印使用チェック" />
-     <label class="form-check-label" for="useLandmark">6</label>
+     <input class="form-check-input position-static" type="checkbox" id="useLandmark" value="1" checked="checked" aria-label="7-目印使用チェック" />
+     <label class="form-check-label" for="useLandmark">7</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
@@ -286,8 +359,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="useEvacuee" value="1" checked="checked" aria-label="7-避難者使用チェック" />
-     <label class="form-check-label" for="useEvacuee">7</label>
+     <input class="form-check-input position-static" type="checkbox" id="useEvacuee" value="1" checked="checked" aria-label="8-避難者使用チェック" />
+     <label class="form-check-label" for="useEvacuee">8</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
@@ -376,8 +449,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="useShelter1" value="1" checked="checked" aria-label="8-避難場所1使用チェック" />
-     <label class="form-check-label" for="useShelter1">8</label>
+     <input class="form-check-input position-static" type="checkbox" id="useShelter1" value="1" checked="checked" aria-label="9-避難場所1使用チェック" />
+     <label class="form-check-label" for="useShelter1">9</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
@@ -452,8 +525,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="useShelter2" value="1" checked="checked" aria-label="9-避難場所2使用チェック" />
-     <label class="form-check-label" for="useShelter2">9</label>
+     <input class="form-check-input position-static" type="checkbox" id="useShelter2" value="1" checked="checked" aria-label="10-避難場所2使用チェック" />
+     <label class="form-check-label" for="useShelter2">10</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
@@ -514,8 +587,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="usePossession" value="1" checked="checked" aria-label="10-所持品使用チェック" />
-     <label class="form-check-label" for="usePossession">10</label>
+     <input class="form-check-input position-static" type="checkbox" id="usePossession" value="1" checked="checked" aria-label="11-所持品使用チェック" />
+     <label class="form-check-label" for="usePossession">11</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
@@ -555,8 +628,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="useRemarks" value="1" checked="checked" aria-label="11-備考使用チェック" />
-     <label class="orm-check-label" for="useRemarks">11</label>
+     <input class="form-check-input position-static" type="checkbox" id="useRemarks" value="1" checked="checked" aria-label="12-備考使用チェック" />
+     <label class="orm-check-label" for="useRemarks">12</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
@@ -572,8 +645,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="useOthers1" value="1" aria-label="12-その他1使用チェック" />
-     <label class="form-check-label" for="useOthers1">12</label>
+     <input class="form-check-input position-static" type="checkbox" id="useOthers1" value="1" aria-label="13-その他1使用チェック" />
+     <label class="form-check-label" for="useOthers1">13</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
@@ -623,8 +696,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="useOthers2" value="1" aria-label="13-その他2使用チェック" />
-     <label class="form-check-label" for="useOthers2">13</label>
+     <input class="form-check-input position-static" type="checkbox" id="useOthers2" value="1" aria-label="14-その他2使用チェック" />
+     <label class="form-check-label" for="useOthers2">14</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
@@ -663,8 +736,8 @@
   <div class="row justify-content-md-center">
    <div class="col-2 col-md-1 mb-3 px-1">
     <div class="form-check">
-     <input class="form-check-input position-static" type="checkbox" id="useOthers3" value="1" aria-label="14-その他3使用チェック" />
-     <label class="form-check-label" for="useOthers3">14</label>
+     <input class="form-check-input position-static" type="checkbox" id="useOthers3" value="1" aria-label="15-その他3使用チェック" />
+     <label class="form-check-label" for="useOthers3">15</label>
     </div>
    </div>
    <div class="col-10 col-md-7 mb-3">
